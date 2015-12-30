@@ -10,7 +10,7 @@ use LogicException;
  */
 class PairQuoteData {
     /**
-     * @var string name of currency pair, e.g. USD/RUB
+     * @var string name of currency pair, e.g. USDRUB
      */
     private $pairName = '';
 
@@ -25,7 +25,7 @@ class PairQuoteData {
     private $date = '';
 
     public function __construct($pairName, $quote, $date) {
-        $this->pairName = (string) $pairName;
+        $this->pairName = str_replace('/', '', $pairName);
         $this->quote    = (float) $quote;
 
         if (date('Y-m-d', strtotime($date)) != $date) {

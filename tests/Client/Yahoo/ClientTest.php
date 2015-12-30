@@ -88,7 +88,7 @@ class ClientTest extends PHPUnit_Framework_TestCase {
         /** @var PairQuoteData $PairRate */
         $PairRate = current($Result);
         $this->assertInstanceOf(PairQuoteData::class, $PairRate);
-        $this->assertEquals('USD/RUB', $PairRate->getPairName());
+        $this->assertEquals('USDRUB', $PairRate->getPairName());
         $this->assertEquals(73.5245, $PairRate->getQuote());
         $this->assertEquals('2015-12-30', $PairRate->getDate());
     }
@@ -96,7 +96,7 @@ class ClientTest extends PHPUnit_Framework_TestCase {
     public function testGet() {
         $Result = (new Client())->get('USDRUB');
         $this->assertInstanceOf(PairQuoteData::class, $Result);
-        $this->assertEquals('USD/RUB', $Result->getPairName());
+        $this->assertEquals('USDRUB', $Result->getPairName());
         if ($Result->getQuote() < 30) {
             $this->fail('ебать мы богаты');
         }
@@ -110,7 +110,7 @@ class ClientTest extends PHPUnit_Framework_TestCase {
         /** @var PairQuoteData $PairRate1 */
         $PairRate1 = current($Result);
         $this->assertInstanceOf(PairQuoteData::class, $PairRate1);
-        $this->assertEquals('USD/RUB', $PairRate1->getPairName());
+        $this->assertEquals('USDRUB', $PairRate1->getPairName());
         if ($PairRate1->getQuote() < 30) {
             $this->fail('ебать мы богаты');
         }
@@ -119,7 +119,7 @@ class ClientTest extends PHPUnit_Framework_TestCase {
         /** @var PairQuoteData $PairRate2 */
         $PairRate2 = end($Result);
         $this->assertInstanceOf(PairQuoteData::class, $PairRate2);
-        $this->assertEquals('EUR/RUB', $PairRate2->getPairName());
+        $this->assertEquals('EURRUB', $PairRate2->getPairName());
         if ($PairRate2->getQuote() < 40) {
             $this->fail('ебать мы богаты');
         }
