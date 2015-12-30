@@ -1,0 +1,22 @@
+{
+  "name": "chapsuk/currobber",
+  "description": "Currency grubber lib",
+  "authors": [
+    {
+      "name": "chapsuk",
+      "email": "jo1nk1k@gmail.com"
+    }
+  ],
+  "autoload": {
+    "psr-4": {"Currobber\\": "src/"}
+  },
+  "autoload-dev": {
+    "psr-4": {"Currobber\\Tests\\": "tests/"}
+  },
+  "require": {
+    "guzzlehttp/guzzle": "6.0.1"
+  },
+  "require-dev": {
+    "phpunit/phpunit": "4.4.*"
+  }
+}
