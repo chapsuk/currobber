@@ -3,7 +3,7 @@
 namespace Currobber\Tests\Client\Currencylayer;
 
 use Currobber\Client\Currencylayer\Client;
-use Currobber\Result\PairQuoteData;
+use Currobber\Result\PairRateData;
 use GuzzleHttp\Psr7\Request;
 use GuzzleHttp\Psr7\Response;
 use GuzzleHttp\Psr7\Stream;
@@ -17,10 +17,9 @@ use ReflectionMethod;
 class ClientTest extends PHPUnit_Framework_TestCase {
 
     public function testCreateInstance() {
-        $accessKey = '63a1d124bcd8e88c3ad2cf7f2d0c3a8f';
+        $accessKey = 'testKey';
         $Client = new Client($accessKey);
         $this->assertEquals($accessKey, $Client->getAccessKey());
-        var_dump($Client->getMulti('USD', ['EUR', 'RUB'], '2015-10-10'));
     }
 
     public function testCreateUri() {
@@ -39,7 +38,7 @@ class ClientTest extends PHPUnit_Framework_TestCase {
         $correctUri = 'http://apilayer.net/api/historical?source=USD&currencies=EUR&date=2015-10-10&access_key=testKey';
 
         $accessKey = 'testKey';
-        $Reflection = new ReflectionMethod(Client::class, 'createRequest');
+        $Reflection = new ReflectionMethod(Client::class, 'createGetRequest');
         $Reflection->setAccessible(true);
         $Instance = new Client($accessKey);
 
@@ -82,11 +81,11 @@ class ClientTest extends PHPUnit_Framework_TestCase {
 
         $Result = $Reflection->invoke($Instance, $ResponseMock);
         $this->assertCount(1, $Result);
-        /** @var PairQuoteData $PairRate */
+        /** @var PairRateData $PairRate */
         $PairRate = current($Result);
-        $this->assertInstanceOf(PairQuoteData::class, $PairRate);
+        $this->assertInstanceOf(PairRateData::class, $PairRate);
         $this->assertEquals('USDEUR', $PairRate->getPairName());
-        $this->assertEquals(0.880398, $PairRate->getQuote());
+        $this->assertEquals(0.880398, $PairRate->getRate());
         $this->assertEquals('2015-10-10', $PairRate->getDate());
     }
 }

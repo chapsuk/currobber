@@ -1,59 +1,58 @@
 <?php
 
-namespace Currobber\Client\Currencylayer;
+namespace Currobber\Client\OpenExchangeRates;
 
 use Currobber\Client\AbstractClient;
 use Currobber\Result\PairRateData;
-use GuzzleHttp\Psr7\Request;
-use LogicException;
 use Psr\Http\Message\ResponseInterface;
 
 /**
- * Client for currencylayer api, free subscription support USD source only
+ * Open Exchange Rates api client
+ * Free subscription support only latest rates, we have yahoo client, that api bad for free
  * @author mkrasilnikov
  */
 class Client extends AbstractClient {
     /**
-     * Currencylayer api endpoint
+     * API endpoint
      */
-    const ENDPOINT = 'http://apilayer.net/api/historical';
+    const ENDPOINT = 'https://openexchangerates.org/api/historical/';
 
     /**
-     * @var string access key
+     * @var string app id
      */
-    private $accessKey = '';
+    private $appId = '';
 
     /**
      * Client constructor.
-     * @param string $accessKey
+     * @param string $appId
      */
-    public function __construct($accessKey) {
-        $this->accessKey = (string) $accessKey;
+    public function __construct($appId) {
+        $this->appId = $appId;
     }
 
     /**
-     * Return api access key
+     * Return app id
      * @return string
      */
-    public function getAccessKey() {
-        return $this->accessKey;
+    public function getAppId() {
+        return $this->appId;
     }
 
     /**
-     * Return uri string
-     * @param string $sourceCurrency
-     * @param string[] $toCurrencies
+     * Return uri
+     * @param string $base
+     * @param array $toCurrencies
      * @param string $date
      * @return string
      */
-    private function createUri($sourceCurrency, array $toCurrencies, $date) {
+    private function createUri($base, array $toCurrencies, $date) {
         return sprintf(
-            "%s?source=%s&currencies=%s&date=%s&access_key=%s",
+            "%s%s.json?app_id=%s&base=%s&symbols=%s",
             self::ENDPOINT,
-            $sourceCurrency,
-            implode(',', $toCurrencies),
             $date,
-            $this->getAccessKey()
+            $this->getAppId(),
+            $base,
+            implode(',', $toCurrencies)
         );
     }
 
@@ -64,15 +63,13 @@ class Client extends AbstractClient {
      */
     protected function parseResponse(ResponseInterface $Response) {
         $response = json_decode($Response->getBody()->getContents(), true);
-        if (!$response['success']) {
-            throw new LogicException('error response: ' . json_encode($response));
-        }
         $result = [];
-        foreach ($response['quotes'] as $pairName => $quote) {
+        $date = date('Y-m-d', $response['timestamp']);
+        foreach ($response['rates'] as $toCurrency => $quote) {
             $result[] = new PairRateData(
-                $pairName,
+                $response['base'].$toCurrency,
                 $quote,
-                $response['date']
+                $date
             );
         }
         return $result;
@@ -80,7 +77,7 @@ class Client extends AbstractClient {
 
     /**
      * Return pair quote data
-     * @param string $sourceCurrency (free subscription support USD source only)
+     * @param string $sourceCurrency
      * @param string $toCurrency
      * @param string $date
      * @return PairRateData
@@ -100,7 +97,7 @@ class Client extends AbstractClient {
      * @param string $date
      * @return PairRateData[]
      */
-    public function getMulti($sourceCurrency, array $toCurrencies, $date) {
+    public function getMulti($sourceCurrency, $toCurrencies, $date) {
         $uri = $this->createUri($sourceCurrency, $toCurrencies, $date);
         $Request = $this->createGetRequest($uri);
         $Response = $this->getHttpClient()->send($Request);

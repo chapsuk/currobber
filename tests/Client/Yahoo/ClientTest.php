@@ -3,7 +3,7 @@
 namespace Currobber\Tests\Client\Yahoo;
 
 use Currobber\Client\Yahoo\Client;
-use Currobber\Result\PairQuoteData;
+use Currobber\Result\PairRateData;
 use GuzzleHttp\Psr7\Request;
 use GuzzleHttp\Psr7\Response;
 use GuzzleHttp\Psr7\Stream;
@@ -38,7 +38,7 @@ class ClientTest extends PHPUnit_Framework_TestCase {
     }
 
     public function testCreateRequest() {
-        $Reflection = new ReflectionMethod(Client::class, 'createRequest');
+        $Reflection = new ReflectionMethod(Client::class, 'createGetRequest');
         $Reflection->setAccessible(true);
         $Instance = new Client();
 
@@ -85,19 +85,19 @@ class ClientTest extends PHPUnit_Framework_TestCase {
 
         $Result = $Reflection->invoke($Instance, $ResponseMock);
         $this->assertCount(1, $Result);
-        /** @var PairQuoteData $PairRate */
+        /** @var PairRateData $PairRate */
         $PairRate = current($Result);
-        $this->assertInstanceOf(PairQuoteData::class, $PairRate);
+        $this->assertInstanceOf(PairRateData::class, $PairRate);
         $this->assertEquals('USDRUB', $PairRate->getPairName());
-        $this->assertEquals(73.5245, $PairRate->getQuote());
+        $this->assertEquals(73.5245, $PairRate->getRate());
         $this->assertEquals('2015-12-30', $PairRate->getDate());
     }
 
     public function testGet() {
         $Result = (new Client())->get('USDRUB');
-        $this->assertInstanceOf(PairQuoteData::class, $Result);
+        $this->assertInstanceOf(PairRateData::class, $Result);
         $this->assertEquals('USDRUB', $Result->getPairName());
-        if ($Result->getQuote() < 30) {
+        if ($Result->getRate() < 30) {
             $this->fail('ебать мы богаты');
         }
         $this->assertEquals(date('Y-m-d'), $Result->getDate());
@@ -107,20 +107,20 @@ class ClientTest extends PHPUnit_Framework_TestCase {
         $Result = (new Client())->getMulti(['USDRUB', 'EURRUB']);
         $this->assertCount(2, $Result);
 
-        /** @var PairQuoteData $PairRate1 */
+        /** @var PairRateData $PairRate1 */
         $PairRate1 = current($Result);
-        $this->assertInstanceOf(PairQuoteData::class, $PairRate1);
+        $this->assertInstanceOf(PairRateData::class, $PairRate1);
         $this->assertEquals('USDRUB', $PairRate1->getPairName());
-        if ($PairRate1->getQuote() < 30) {
+        if ($PairRate1->getRate() < 30) {
             $this->fail('ебать мы богаты');
         }
         $this->assertEquals(date('Y-m-d'), $PairRate1->getDate());
 
-        /** @var PairQuoteData $PairRate2 */
+        /** @var PairRateData $PairRate2 */
         $PairRate2 = end($Result);
-        $this->assertInstanceOf(PairQuoteData::class, $PairRate2);
+        $this->assertInstanceOf(PairRateData::class, $PairRate2);
         $this->assertEquals('EURRUB', $PairRate2->getPairName());
-        if ($PairRate2->getQuote() < 40) {
+        if ($PairRate2->getRate() < 40) {
             $this->fail('ебать мы богаты');
         }
         $this->assertEquals(date('Y-m-d'), $PairRate2->getDate());

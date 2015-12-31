@@ -3,8 +3,7 @@
 namespace Currobber\Client\Yahoo;
 
 use Currobber\Client\AbstractClient;
-use Currobber\Result\PairQuoteData;
-use GuzzleHttp\Psr7\Request;
+use Currobber\Result\PairRateData;
 use Psr\Http\Message\ResponseInterface;
 use SimpleXMLElement;
 
@@ -45,25 +44,16 @@ class Client extends AbstractClient {
     }
 
     /**
-     * Return guzzle request object
-     * @param string $uri
-     * @return Request
-     */
-    private function createRequest($uri) {
-        return new Request('GET', $uri);
-    }
-
-    /**
      * Convert guzzle response to our result
      * @param ResponseInterface $Response
-     * @return PairQuoteData[]
+     * @return PairRateData[]
      */
-    private function parseResponse(ResponseInterface $Response) {
+    protected function parseResponse(ResponseInterface $Response) {
         $Chart = new SimpleXMLElement($Response->getBody()->getContents());
         $result = [];
         if (isset($Chart->results->rate)) {
             foreach ($Chart->results->rate as $Pair) {
-                $result[] = new PairQuoteData(
+                $result[] = new PairRateData(
                     (string) $Pair->Name,
                     (float) $Pair->Rate,
                     date('Y-m-d', strtotime($Pair->Date))
@@ -76,12 +66,12 @@ class Client extends AbstractClient {
     /**
      * Return pair quote
      * @param string $pair pair name, e.g. "EURRUB"
-     * @return PairQuoteData
+     * @return PairRateData
      */
     public function get($pair) {
         $realPairName = $this->preparePairName($pair);
         $uri = $this->createUri([$realPairName]);
-        $Request = $this->createRequest($uri);
+        $Request = $this->createGetRequest($uri);
         $Response = $this->getHttpClient()->send($Request);
         $Result = $this->parseResponse($Response);
         return current($Result);
@@ -90,14 +80,14 @@ class Client extends AbstractClient {
     /**
      * Return array of pair quotes data objects
      * @param array $pairs pairs name, e.g. ["EURRUB", "USDRUB"]
-     * @return PairQuoteData[]
+     * @return PairRateData[]
      */
     public function getMulti(array $pairs) {
         $realPairNames = array_map(function ($pair) {
             return $this->preparePairName($pair);
         }, $pairs);
         $uri = $this->createUri($realPairNames);
-        $Request = $this->createRequest($uri);
+        $Request = $this->createGetRequest($uri);
         $Response = $this->getHttpClient()->send($Request);
         $Result = $this->parseResponse($Response);
         return $Result;
