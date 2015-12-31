@@ -38,7 +38,7 @@ class ClientTest extends PHPUnit_Framework_TestCase {
     }
 
     public function testCreateRequest() {
-        $Reflection = new ReflectionMethod(Client::class, 'createRequest');
+        $Reflection = new ReflectionMethod(Client::class, 'createGetRequest');
         $Reflection->setAccessible(true);
         $Instance = new Client();
 

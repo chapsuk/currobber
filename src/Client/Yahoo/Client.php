@@ -4,7 +4,6 @@ namespace Currobber\Client\Yahoo;
 
 use Currobber\Client\AbstractClient;
 use Currobber\Result\PairQuoteData;
-use GuzzleHttp\Psr7\Request;
 use Psr\Http\Message\ResponseInterface;
 use SimpleXMLElement;
 
@@ -45,20 +44,11 @@ class Client extends AbstractClient {
     }
 
     /**
-     * Return guzzle request object
-     * @param string $uri
-     * @return Request
-     */
-    private function createRequest($uri) {
-        return new Request('GET', $uri);
-    }
-
-    /**
      * Convert guzzle response to our result
      * @param ResponseInterface $Response
      * @return PairQuoteData[]
      */
-    private function parseResponse(ResponseInterface $Response) {
+    protected function parseResponse(ResponseInterface $Response) {
         $Chart = new SimpleXMLElement($Response->getBody()->getContents());
         $result = [];
         if (isset($Chart->results->rate)) {
@@ -81,7 +71,7 @@ class Client extends AbstractClient {
     public function get($pair) {
         $realPairName = $this->preparePairName($pair);
         $uri = $this->createUri([$realPairName]);
-        $Request = $this->createRequest($uri);
+        $Request = $this->createGetRequest($uri);
         $Response = $this->getHttpClient()->send($Request);
         $Result = $this->parseResponse($Response);
         return current($Result);
@@ -97,7 +87,7 @@ class Client extends AbstractClient {
             return $this->preparePairName($pair);
         }, $pairs);
         $uri = $this->createUri($realPairNames);
-        $Request = $this->createRequest($uri);
+        $Request = $this->createGetRequest($uri);
         $Response = $this->getHttpClient()->send($Request);
         $Result = $this->parseResponse($Response);
         return $Result;

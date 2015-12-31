@@ -20,7 +20,6 @@ class ClientTest extends PHPUnit_Framework_TestCase {
         $accessKey = '63a1d124bcd8e88c3ad2cf7f2d0c3a8f';
         $Client = new Client($accessKey);
         $this->assertEquals($accessKey, $Client->getAccessKey());
-        var_dump($Client->getMulti('USD', ['EUR', 'RUB'], '2015-10-10'));
     }
 
     public function testCreateUri() {
@@ -39,7 +38,7 @@ class ClientTest extends PHPUnit_Framework_TestCase {
         $correctUri = 'http://apilayer.net/api/historical?source=USD&currencies=EUR&date=2015-10-10&access_key=testKey';
 
         $accessKey = 'testKey';
-        $Reflection = new ReflectionMethod(Client::class, 'createRequest');
+        $Reflection = new ReflectionMethod(Client::class, 'createGetRequest');
         $Reflection->setAccessible(true);
         $Instance = new Client($accessKey);
 
