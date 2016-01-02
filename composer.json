@@ -1,6 +1,6 @@
 {
   "name": "chapsuk/currobber",
-  "description": "Currency grubber lib",
+  "description": "Currency rates api clients lib",
   "authors": [
     {
       "name": "chapsuk",

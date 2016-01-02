@@ -101,3 +101,88 @@ array(2) {
   }
 }
 ```
+# Grund Trunk api client
+
+```php
+use Currobber\Client\GrandTrunk\Client;
+
+$Client = new Client();
+var_dump($Client->get('USD', 'EUR', '2015-10-10'));
+
+=================
+
+array(1) {
+  [0] =>
+  class Currobber\Result\PairRateData#432 (3) {
+    private $pairName =>
+    string(6) "USDEUR"
+    private $rate =>
+    double(0.880365000003)
+    private $date =>
+    string(10) "2015-10-10"
+  }
+}
+```
+
+```php 
+use Currobber\Client\GrandTrunk\Client;
+
+$Client = new Client();
+var_dump($Client->getForPeriod('USD', 'EUR', '2015-10-10', '2015-10-15'));
+array(6) {
+  [0] =>
+  class Currobber\Result\PairRateData#432 (3) {
+    private $pairName =>
+    string(6) "USDEUR"
+    private $rate =>
+    double(0.880365000003)
+    private $date =>
+    string(10) "2015-10-10"
+  }
+  [1] =>
+  class Currobber\Result\PairRateData#434 (3) {
+    private $pairName =>
+    string(6) "USDEUR"
+    private $rate =>
+    double(0.880365000003)
+    private $date =>
+    string(10) "2015-10-11"
+  }
+  [2] =>
+  class Currobber\Result\PairRateData#437 (3) {
+    private $pairName =>
+    string(6) "USDEUR"
+    private $rate =>
+    double(0.879275477007)
+    private $date =>
+    string(10) "2015-10-12"
+  }
+  [3] =>
+  class Currobber\Result\PairRateData#430 (3) {
+    private $pairName =>
+    string(6) "USDEUR"
+    private $rate =>
+    double(0.879198171268)
+    private $date =>
+    string(10) "2015-10-13"
+  }
+  [4] =>
+  class Currobber\Result\PairRateData#429 (3) {
+    private $pairName =>
+    string(6) "USDEUR"
+    private $rate =>
+    double(0.876424189308)
+    private $date =>
+    string(10) "2015-10-14"
+  }
+  [5] =>
+  class Currobber\Result\PairRateData#433 (3) {
+    private $pairName =>
+    string(6) "USDEUR"
+    private $rate =>
+    double(0.87420229041)
+    private $date =>
+    string(10) "2015-10-15"
+  }
+}
+```

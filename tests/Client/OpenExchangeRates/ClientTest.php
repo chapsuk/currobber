@@ -11,7 +11,7 @@ use PHPUnit_Framework_TestCase;
 class ClientTest extends PHPUnit_Framework_TestCase {
 
     public function testCreate() {
-        $this->markTestSkipped('open exchange rates support only current rate with free subscription');
+        $this->markTestSkipped('open exchange rates with free subscription support only current rate');
         $appId = '<APP_ID>';
         $Client = new Client($appId);
         $Result = $Client->get('USD', 'RUB', '2011-11-11');

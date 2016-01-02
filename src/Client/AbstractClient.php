@@ -18,12 +18,6 @@ abstract class AbstractClient {
     private $HttpClient;
 
     /**
-     * @param ResponseInterface $Response
-     * @return PairRateData[]
-     */
-    abstract protected function parseResponse(ResponseInterface $Response);
-
-    /**
      * Return guzzle http client
      * @return Client
      */
