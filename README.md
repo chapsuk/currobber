@@ -1,4 +1,8 @@
-# Yahoo currency rate client
+# Currency rates clients
+
+[![Build Status](https://travis-ci.org/chapsuk/currobber.svg)](https://travis-ci.org/chapsuk/currobber)
+
+## Yahoo currency rate client
 
 ```php
 use Currobber\Client\Yahoo\Client;
@@ -48,7 +52,7 @@ array(2) {
 }
 ```
 
-# Currencylayer api client
+## Currencylayer api client
 
 Free subscription support source USD only
 
@@ -101,7 +105,7 @@ array(2) {
   }
 }
 ```
-# Grund Trunk api client
+## Grund Trunk api client
 
 ```php
 use Currobber\Client\GrandTrunk\Client;
