@@ -88,7 +88,10 @@ class Client extends AbstractClient {
         $uri = $this->createUriForOneRate($fromCode, $toCode, $date);
         $Request = $this->createGetRequest($uri);
         $Response = $this->getHttpClient()->send($Request);
-        $value = $Response->getBody()->getContents();
+        $value = (float) $Response->getBody()->getContents();
+        if ($value <= 0) {
+            return null;
+        }
         return new PairRateData(
             strtoupper($fromCode) . strtoupper($toCode),
             $value,
