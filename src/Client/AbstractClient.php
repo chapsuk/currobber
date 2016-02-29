@@ -30,12 +30,24 @@ abstract class AbstractClient {
     private $HttpClient;
 
     /**
+     * @var array guzzle http client config
+     */
+    private $httpConfig = [];
+
+    /**
+     * @param array $config guzzle http client config
+     */
+    public function __construct(array $config = []) {
+        $this->httpConfig = $config;
+    }
+
+    /**
      * Return guzzle http client
      * @return Client
      */
     protected function getHttpClient() {
         if (is_null($this->HttpClient)) {
-            $this->HttpClient = new Client();
+            $this->HttpClient = new Client($this->httpConfig);
         }
         return $this->HttpClient;
     }
