@@ -21,8 +21,8 @@ class ClientTest extends PHPUnit_Framework_TestCase {
         $Reflection->setAccessible(true);
         $Instance = new Client();
 
-        $correctUriForOne = 'http://query.yahooapis.com/v1/public/yql?q=select * from yahoo.finance.xchange where pair in (USDRUB)&env=store://datatables.org/alltableswithkeys';
-        $correctUriForMany = 'http://query.yahooapis.com/v1/public/yql?q=select * from yahoo.finance.xchange where pair in (USDRUB,EURRUB)&env=store://datatables.org/alltableswithkeys';
+        $correctUriForOne = 'http://query.yahooapis.com/v1/public/yql?q=select * from yahoo.finance.xchange where pair in (USDRUB)&env=http://datatables.org/alltables.env';
+        $correctUriForMany = 'http://query.yahooapis.com/v1/public/yql?q=select * from yahoo.finance.xchange where pair in (USDRUB,EURRUB)&env=http://datatables.org/alltables.env';
 
         $this->assertEquals($correctUriForOne, $Reflection->invoke($Instance, ['USDRUB']));
         $this->assertEquals($correctUriForMany, $Reflection->invoke($Instance, ['USDRUB', 'EURRUB']));
@@ -45,7 +45,7 @@ class ClientTest extends PHPUnit_Framework_TestCase {
         $correctSheme = 'http';
         $correctHost  = 'query.yahooapis.com';
         $correctPath  = '/v1/public/yql';
-        $correctQuery = 'q=select%20*%20from%20yahoo.finance.xchange%20where%20pair%20in%20(%22USDRUB%22)&env=store://datatables.org/alltableswithkeys';
+        $correctQuery = 'q=select%20*%20from%20yahoo.finance.xchange%20where%20pair%20in%20(%22USDRUB%22)&env=http://datatables.org/alltables.env';
 
         /** @var Request $Request */
         $Request = $Reflection->invoke($Instance, $correctSheme. '://'.$correctHost.$correctPath.'?'.$correctQuery);
