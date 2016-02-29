@@ -43,7 +43,7 @@ class Client extends AbstractClient {
      */
     private function createUri(array $pairs) {
         return sprintf(
-            "%s?q=%s&env=http://datatables.org/alltables.env",
+            "%s?q=%s&env=store://datatables.org/alltableswithkeys",
             self::ENDPOINT,
             sprintf(self::QUERY_TPL, implode(',', $pairs))
         );
